@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Main extends Application {
+public class MainView extends Application {
 
     private Scene scene; // наше окно, на котором будут располагаться все прочие элементы
     private Group group; // основной контейнер с координатами 0.0 по размеру окна
@@ -25,6 +25,8 @@ public class Main extends Application {
     private VBox vBox;
     private FlowPane fPane;
     private static HBox hBox;
+
+    private String result;
 
 
     @Override
@@ -121,6 +123,43 @@ public class Main extends Application {
         btn_leftBrack.setMinSize(80, 65);
         btn_rightBrack.setMinSize(80, 65);
         btn_AC.setMinSize(80, 65);
+
+        btn_one.setOnAction(event -> textField.appendText("1"));
+        btn_two.setOnAction(event -> textField.appendText("2"));
+        btn_three.setOnAction(event -> textField.appendText("3"));
+        btn_four.setOnAction(event -> textField.appendText("4"));
+        btn_five.setOnAction(event -> textField.appendText("5"));
+        btn_six.setOnAction(event -> textField.appendText("6"));
+        btn_seven.setOnAction(event -> textField.appendText("7"));
+        btn_eight.setOnAction(event -> textField.appendText("8"));
+        btn_nine.setOnAction(event -> textField.appendText("9"));
+        btn_zero.setOnAction(event -> textField.appendText("0"));
+        btn_plus.setOnAction(event -> textField.appendText("+"));
+        btn_minus.setOnAction(event -> textField.appendText("-"));
+        btn_divide.setOnAction(event -> textField.appendText("/"));
+        btn_multiply.setOnAction(event -> textField.appendText("*"));
+        btn_comma.setOnAction(event -> textField.appendText("."));
+        btn_colon.setOnAction(event -> textField.appendText(":"));
+        btn_question.setOnAction(event -> textField.appendText("?"));
+        btn_more.setOnAction(event -> textField.appendText(">"));
+        btn_less.setOnAction(event -> textField.appendText("<"));
+        btn_leftBrack.setOnAction(event -> textField.appendText("("));
+        btn_rightBrack.setOnAction(event -> textField.appendText(")"));
+        btn_AC.setOnAction(event -> textField.clear());
+
+        btn_square.setOnAction(event -> {
+            result = Controller.squareCalc(textField.getText());
+            textField.clear();
+            textField.insertText(0, result);
+        });
+
+        btn_equals.setOnAction(event -> {
+            // "равно" берет все данные из textField и производит вычисления, затем
+            // выводит результат обратно в textField в формате String
+            result = Controller.startWork(textField.getText());
+            textField.clear();
+            textField.insertText(0, result);
+        });
 
         fPane = new FlowPane();
         fPane.maxWidth(360);
