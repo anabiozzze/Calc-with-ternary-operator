@@ -8,12 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class MainView extends Application {
 
@@ -24,7 +20,6 @@ public class MainView extends Application {
     private TextField textField; // текстовое поле для ввода ссылок
     private VBox vBox;
     private FlowPane fPane;
-    private static HBox hBox;
 
     private String result;
 
@@ -99,6 +94,13 @@ public class MainView extends Application {
         Button btn_leftBrack = new Button("(");
         Button btn_AC = new Button("AC");
 
+        btn_AC.setStyle("-fx-background-color: floralwhite");
+        btn_multiply.setStyle("-fx-background-color: whitesmoke");
+        btn_divide.setStyle("-fx-background-color: whitesmoke");
+        btn_equals.setStyle("-fx-background-color: whitesmoke");
+        btn_minus.setStyle("-fx-background-color: whitesmoke");
+        btn_plus.setStyle("-fx-background-color: whitesmoke");
+
         btn_zero.setMinSize(80, 65);
         btn_one.setMinSize(80, 65);
         btn_two.setMinSize(80, 65);
@@ -124,6 +126,7 @@ public class MainView extends Application {
         btn_rightBrack.setMinSize(80, 65);
         btn_AC.setMinSize(80, 65);
 
+        // задаем кнопкам действия
         btn_one.setOnAction(event -> textField.appendText("1"));
         btn_two.setOnAction(event -> textField.appendText("2"));
         btn_three.setOnAction(event -> textField.appendText("3"));
@@ -148,17 +151,17 @@ public class MainView extends Application {
         btn_AC.setOnAction(event -> textField.clear());
 
         btn_square.setOnAction(event -> {
+            // "квадрат" берет число из textField и вычисляет его корень, затем
+            // выводит результат обратно в textField в формате String
             result = Controller.squareCalc(textField.getText());
-            textField.clear();
-            textField.insertText(0, result);
+            checkAndShow();
         });
 
         btn_equals.setOnAction(event -> {
             // "равно" берет все данные из textField и производит вычисления, затем
             // выводит результат обратно в textField в формате String
             result = Controller.startWork(textField.getText());
-            textField.clear();
-            textField.insertText(0, result);
+            checkAndShow();
         });
 
         fPane = new FlowPane();
@@ -181,27 +184,19 @@ public class MainView extends Application {
         pane.setCenter(fPane);
     }
 
-    // этот метод забирает из текстового поля введенный текст и проверяет его на корректность
-    private String getText() {
-        String UserText = textField.getText();
+    // метод следит за реакцией контроллера на введенную строку; если она некорректна -
+    // метод сообщает об ошибке в окке программы. Если корректна - выводит результат в окно программы.
+    private void checkAndShow() {
+        if (result.equals("Введено некорректное значение")) {
 
-        String result = "";
+            textField.clear();
+            textField.setPromptText("Введено некорректное значение");
 
-        Pattern pattern = Pattern.compile("<[^>]*>");
-        Matcher matcher = pattern.matcher(UserText);
-        final StringBuffer text = new StringBuffer(UserText.length());
-
-        while (matcher.find()) {
-            matcher.appendReplacement(
-                    text,
-                    " ");
+        } else {
+            textField.setPromptText("Введите выражение:");
+            textField.clear();
+            textField.insertText(0, result);
         }
-
-        matcher.appendTail(text);
-
-        result = text.toString().trim();
-
-        return result;
     }
 }
 
