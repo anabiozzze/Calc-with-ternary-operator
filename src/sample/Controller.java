@@ -32,6 +32,15 @@ public class Controller {
     // возвращает true, если текст корректен (не содержит буквы, строковые и пробельные символы)
     private static boolean checkText(String str) {
         String result = "";
+        str = str.replaceAll("\\s", "");
+
+        System.out.println(str);
+
+        if ((str.contains("?")) && str.contains(":")) {
+            ternarExpression(str);
+
+            return true;
+        }
 
         Pattern pattern = Pattern.compile("^[\\d-+/*><().]*$");
         Matcher matcher = pattern.matcher(str);
@@ -66,6 +75,50 @@ public class Controller {
 
         System.out.println(stringResult);
     }
+
+    private static void ternarExpression(String str) {
+        int indexOperator = (str.indexOf('<') > 0) ? str.indexOf('<') : str.indexOf(">");
+        int indexBracket = str.indexOf(')');
+        int indexQuest = str.indexOf("?");
+        int indexColon = str.indexOf(":");
+
+        String firstNum = str.substring(1, indexOperator);
+        System.out.println(firstNum);
+
+        String secondNum = str.substring(indexOperator + 1, indexQuest - 1);
+        System.out.println(secondNum);
+
+        setExpression(firstNum);
+        calculation();
+        firstNum = getStringResult();
+        System.out.println(firstNum);
+
+        setExpression(secondNum);
+        calculation();
+        secondNum = getStringResult();
+        System.out.println(secondNum);
+
+        Boolean temp = null;
+
+        if (str.contains("<")) {
+            try {
+                temp = Integer.parseInt(firstNum) < Integer.parseInt(secondNum);
+            } catch (NumberFormatException e) {
+                temp = Double.parseDouble(firstNum) < Double.parseDouble(secondNum);
+            }
+
+        } else {
+            try {
+                temp = Integer.parseInt(firstNum) > Integer.parseInt(secondNum);
+            } catch (NumberFormatException e) {
+                temp = Double.parseDouble(firstNum) > Double.parseDouble(secondNum);
+            }
+        }
+
+        stringResult = (temp) ? (str.substring(indexQuest + 1, indexColon)) : str.substring(indexColon + 1);
+        System.out.println(stringResult);
+    }
+
 
     // метод определяет, дробное или целое число введено пользователем
     // высчитывает квадратный корень, возвращает как строку
